@@ -1,0 +1,22 @@
+/* All imports .scss */
+
+
+/* Pages */
+@use './variables' as *;
+@use './reset' as *;
+@use './App';
+@use '../pages/AdminCarsListPage/AdminCarsListPage.scss';
+@use '../pages/AdminClientsListPage/AdminClientsListPage.scss';
+@use '../pages/AdminMainPage/AdminMainPage.scss';
+@use '../pages/AdminOrdersListPage/AdminOrdersListPage.scss';
+@use '../pages/AdminTestDrivesListPage/AdminTestDrivesListPage.scss';
+@use '../pages/CarPage/CarPage.scss';
+@use '../pages/CartPage/CartPage.scss';
+@use '../pages/CatalogPage/CatalogPage.scss';
+@use '../pages/MainPage/MainPage.scss';
+@use '../pages/OrderCarPage/OrderCarPage.scss';
+@use '../pages/Page404/Page404.scss';
+@use '../pages/SignInPage/SignInPage.scss';
+@use '../pages/SignUpPage/SignUpPage.scss';
+@use '../pages/TestDriveFormPage/TestDriveFormPage.scss';
+@use '../pages/TrackingPage/TrackingPage.scss';
