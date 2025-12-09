@@ -1,9 +1,9 @@
-import React from 'react'
+import OrderCarForm from "../../components/forms/OrderCarForm";
 
 const OrderCarPage = () => {
   return (
-    <div>OrderCarPage</div>
+    <OrderCarForm />
   )
 }
 
-export default OrderCarPage
+export default OrderCarPage;

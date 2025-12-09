@@ -27,6 +27,7 @@ export default function AppRoutes() {
       <Route path="/test-drive" element={<TestDriveFormPage />} />
       <Route path="/tracking" element={<TrackingPage />} />
       <Route path="/cart" element={<CartPage />} />
+      
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/signin" element={<SignInPage />} />
 
