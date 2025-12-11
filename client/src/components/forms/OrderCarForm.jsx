@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -30,6 +30,7 @@ const OrderCarScheme = Yup.object({
 
 export default function OrderCarPage() {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const formik = useFormik({
     initialValues: {
@@ -44,7 +45,7 @@ export default function OrderCarPage() {
     validationSchema: OrderCarScheme,
     onSubmit: values => {
       //todo: this car added to the cart list
-      navigate('/catalog');
+      navigate('/cars');
     },
   })
 
@@ -134,7 +135,7 @@ export default function OrderCarPage() {
       </div>
 
       <button type="submit">Add to cart</button>
-      <button type="button" onClick={() => navigate('/catalog')}>Cancel</button>
+      <button type="button" onClick={() => navigate(`/cars/${id}/details`)}>Cancel</button>
     </form>
 
   )

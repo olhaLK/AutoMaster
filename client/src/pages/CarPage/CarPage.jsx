@@ -1,9 +1,19 @@
-import React from 'react'
+import { useNavigate, useParams } from "react-router-dom";
 
 const CarPage = () => {
-  return (
-    <div>CarPage</div>
-  )
-}
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-export default CarPage
+  const handleBuy = () => {
+    navigate(`/order/${id}`);
+  }
+
+  return (
+    <div>
+      <h1>Car Details for ID: {id}</h1>
+      <button type="button" onClick={handleBuy}>Buy now</button>
+    </div>
+  );
+};
+
+export default CarPage;

@@ -7,6 +7,8 @@ const CartPage = () => {
         name
         short discription
         price
+        ------
+        from order get car id 
         */}
         {items.map((car, index) => (
           <li key={index}>
