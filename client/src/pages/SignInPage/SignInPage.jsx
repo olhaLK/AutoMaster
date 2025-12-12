@@ -1,8 +1,8 @@
-import React from 'react'
+import SignInForm from '../../components/forms/SignInForm/SignInForm';
 
 const SignInPage = () => {
   return (
-    <div>SignInPage</div>
+    <SignInForm  />
   )
 }
 

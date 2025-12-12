@@ -1,4 +1,4 @@
-import OrderCarForm from "../../components/forms/OrderCarForm";
+import OrderCarForm from "../../components/forms/OrderCarForm/OrderCarForm";
 
 const OrderCarPage = () => {
   return (
