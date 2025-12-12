@@ -81,5 +81,14 @@ app.delete('/api/cars/:id', async (req, res) => {
     }
 });
 
+app.get('/api/cars/:id', async (req, res) => {
+    try {
+        const car = await Car.findById(req.params.id);
+        res.json(car);
+    } catch (err) {
+        res.status(404).json({ error: "Car not found" });
+    }
+});
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

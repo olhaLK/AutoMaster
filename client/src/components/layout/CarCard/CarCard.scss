@@ -1,0 +1,60 @@
+.car-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  height: 450px;
+  width: 700px;
+  padding-top: 20px;
+  padding-left: 20px;
+  background: #2D2A2B;
+
+
+
+
+  &:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-img {
+    width: 600px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 5px;
+
+  }
+
+  .price{
+    font-size: 1.5rem;
+    color: #27ae60;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+  .mileage{
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+  }
+  .carName {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 5px 0;
+    color:#988C88
+  }
+  .viewDetails{
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #AD5031;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+
+    &:hover {
+      background-color: #3498db;
+    }
+  }
+
+}

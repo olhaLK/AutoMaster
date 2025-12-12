@@ -22,7 +22,7 @@ export default function AppRoutes() {
       {/* user. todo: visit those pages can only authing user */}
       <Route path="/" element={<MainPage />} />
       <Route path="/cars" element={<CatalogPage />} />
-      <Route path="/cars/:id/details" element={<CarPage />} />
+      <Route path="/cars/:id" element={<CarPage />} />
       <Route path="/order/:id" element={<OrderCarPage />} />
       <Route path="/test-drive" element={<TestDriveFormPage />} />
       <Route path="/tracking" element={<TrackingPage />} />

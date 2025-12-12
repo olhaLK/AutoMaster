@@ -2,11 +2,11 @@ import React, {useEffect} from 'react';
 import {fetchCars} from "../../store/features/cars.js";
 import CarCard from "../../components/layout/CarCard/CarCard.jsx";
 import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 const CatalogPage = () => {
     const dispatch = useDispatch();
     const { carsList, status, error } = useSelector(state => state.cars);
-
     useEffect(() => {
         dispatch(fetchCars());
     }, [dispatch]);
@@ -14,7 +14,7 @@ const CatalogPage = () => {
     if (status === "loading") return <p>Loading cars...</p>;
     if (status === "failed") return <p>Error: {error}</p>;
 
-    console.log("carsList =", carsList);
+
 
     return (
         <div className="car-list">
