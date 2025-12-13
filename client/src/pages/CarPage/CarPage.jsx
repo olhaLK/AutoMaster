@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import './CarPage.scss';
 
 const CarPage = () => {
     const { id } = useParams();
@@ -39,21 +40,30 @@ const CarPage = () => {
         );
 
     return (
-        <div>
+        <div className="container">
             <div className="slider">
-                <button onClick={handlePrev}>Prev</button>
+                <button onClick={handlePrev} className="prev">Prev</button>
                 <img
                     src={images[index]}
                     alt=""
                     style={{ maxWidth: "500px" }}
+                    className="image"
                 />
-                <button onClick={handleNext}>Next</button>
+                <button onClick={handleNext} className="next">Next</button>
             </div>
 
-            <h1>{car.Brand} {car.Model}</h1>
-            <button onClick={() => navigate(`/order/${id}`)}>
+            <h1 className="title">{car.Brand} {car.Model}</h1>
+            <p className="price">Price: {car.Price}$</p>
+            <p className="color">Color: {car.Color}</p>
+            <p className="mileage">Mileage: {car.Mileage} km</p>
+            <p className="wheelDrive">Wheel drive: {car.Wheeldrive}</p>
+            <button onClick={() => navigate(`/order/${id}`)} className="pageBtn">
                 Buy now
             </button>
+            <button type="button" className="pageBtn">
+                Sign up for a test drive
+            </button>
+
         </div>
     );
 };

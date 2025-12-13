@@ -5,9 +5,11 @@ import './CarCard.css';
 function CarCard({_id, name, price, ImgURL, mileage}) {
     const navigate = useNavigate();
 
-    const handleNavigate = () => {
+    const handleNavigate = (e) => {
+        e.preventDefault();
         navigate(`/cars/${_id}`);
     };
+    
 
     return (
         <div className="car-card">

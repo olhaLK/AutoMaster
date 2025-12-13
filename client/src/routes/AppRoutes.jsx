@@ -14,31 +14,34 @@ import AdminClientsListPage from '../pages/AdminClientsListPage/AdminClientsList
 import AdminOrdersListPage from '../pages/AdminOrdersListPage/AdminOrdersListPage';
 import AdminTestDrivesListPage from '../pages/AdminTestDrivesListPage/AdminTestDrivesListPage';
 import AdminCarsListPage from '../pages/AdminCarsListPage/AdminCarsListPage';
+import AddCarPage from "../pages/AddCar/AddCarPage.jsx";
 
 
 export default function AppRoutes() {
   return (
     <Routes>
       {/* user. todo: visit those pages can only authing user */}
-      <Route path="/" element={<MainPage />} />
-      <Route path="/cars" element={<CatalogPage />} />
-      <Route path="/cars/:id" element={<CarPage />} />
-      <Route path="/order/:id" element={<OrderCarPage />} />
-      <Route path="/test-drive" element={<TestDriveFormPage />} />
-      <Route path="/tracking" element={<TrackingPage />} />
-      <Route path="/cart" element={<CartPage />} />
-      
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/signin" element={<SignInPage />} />
+        <Route path="/cars/add" element={<AddCarPage />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/cars" element={<CatalogPage />} />
+        <Route path="/cars/:id" element={<CarPage />} />
+        <Route path="/order/:id" element={<OrderCarPage />} />
+        <Route path="/test-drive" element={<TestDriveFormPage />} />
+        <Route path="/tracking" element={<TrackingPage />} />
+        <Route path="/cart" element={<CartPage />} />
 
-      {/* admin. todo: visit those pages can only admin */}
-      <Route path="/admin" element={<AdminMainPage />} />
-      <Route path="/admin/clients" element={<AdminClientsListPage />} />
-      <Route path="/admin/orders" element={<AdminOrdersListPage />} />
-      <Route path="/admin/test-drives" element={<AdminTestDrivesListPage />} />
-      <Route path="/admin/cars" element={<AdminCarsListPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signin" element={<SignInPage />} />
 
-      <Route path="*" element={<Page404 />} />
+        {/* admin. todo: visit those pages can only admin */}
+        <Route path="/admin" element={<AdminMainPage />} />
+        <Route path="/admin/clients" element={<AdminClientsListPage />} />
+        <Route path="/admin/orders" element={<AdminOrdersListPage />} />
+        <Route path="/admin/test-drives" element={<AdminTestDrivesListPage />} />
+        <Route path="/admin/cars" element={<AdminCarsListPage />} />
+
+
+        <Route path="*" element={<Page404 />} />
     </Routes>
   )
 }

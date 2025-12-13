@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
 const CatalogPage = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { carsList, status, error } = useSelector(state => state.cars);
     useEffect(() => {
@@ -14,9 +15,14 @@ const CatalogPage = () => {
     if (status === "loading") return <p>Loading cars...</p>;
     if (status === "failed") return <p>Error: {error}</p>;
 
-
+    const HandleNavigate = (e) => {
+        e.preventDefault();
+        navigate('/cars/add');
+    }
 
     return (
+        <div className="catalog-page">
+            <button type="button" className="btn-add-car" onClick={HandleNavigate}>Add New Car</button>
         <div className="car-list">
             {carsList.map(car => (
                 <CarCard
@@ -28,6 +34,7 @@ const CatalogPage = () => {
                     ImgURL={car.ImgURL}
                 />
             ))}
+        </div>
         </div>
     );
 };

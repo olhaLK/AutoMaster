@@ -24,7 +24,7 @@ const CarSchema = new mongoose.Schema({
     Price: Number,
     Color: String,
     Mileage: Number,
-    ImageMain: String,
+    ImageURL: String,
     SliderImages: [String],
 }, { timestamps: true });
 
