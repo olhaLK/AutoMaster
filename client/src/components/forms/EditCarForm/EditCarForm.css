@@ -1,0 +1,39 @@
+.car-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 400px;
+}
+.car-form input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.car-form textarea {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+.car-form select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.car-form button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.car-form button:hover {
+  background-color: #218838;
+}
+
+/*# sourceMappingURL=EditCarForm.css.map */

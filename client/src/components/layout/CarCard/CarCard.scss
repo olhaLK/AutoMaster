@@ -55,6 +55,37 @@
     &:hover {
       background-color: #3498db;
     }
+
+  }
+  .deleteBtn{
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #e74c3c;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    margin-left: 10px;
+
+    &:hover {
+      background-color: #c0392b;
+    }
+  }
+  .editBtn{
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #f39c12;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    margin-left: 10px;
+
+    &:hover {
+      background-color: #d35400;
+    }
   }
 
 }

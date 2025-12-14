@@ -1,0 +1,73 @@
+.carForm{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 600px;
+    justify-content: center;
+    gap: 10px;
+  margin: 20px;
+ input{
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #2a2a2a;
+    background: #0f0f0f;
+    color: #ffffff;
+    font-size: 14px;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #ff5c2a;
+      box-shadow: 0 0 0 1px rgba(255, 92, 42, 0.5);
+    }
+ }
+  select{
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #2a2a2a;
+    background: #0f0f0f;
+    color: #ffffff;
+    font-size: 14px;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #ff5c2a;
+      box-shadow: 0 0 0 1px rgba(255, 92, 42, 0.5);
+    }
+  }
+  textarea{
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #2a2a2a;
+    background: #0f0f0f;
+    color: #ffffff;
+    font-size: 14px;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #ff5c2a;
+      box-shadow: 0 0 0 1px rgba(255, 92, 42, 0.5);
+    }
+  }
+  button{
+    margin-top: 10px;
+    padding: 12px 20px;
+    background-color: #ff5c2a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+
+    &:hover {
+        background-color: #e14e22;
+    }
+  }
+}

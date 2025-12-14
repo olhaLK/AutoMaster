@@ -6,13 +6,16 @@ import './styles/index.scss';
 
 
 function App() {
-  return (
-    <>
-     <Header />
-     <AppRoutes />
-     <Footer />
-    </>
-  )
+    return (
+        <div className="app-layout">
+            <Header />
+            <main className="app-content">
+                <AppRoutes />
+            </main>
+            <Footer />
+        </div>
+    );
 }
+
 
 export default App;

@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
+import './SignInForm.css'
 
 
 const SignInScheme = Yup.object({
@@ -51,7 +52,7 @@ export default function SignInForm() {
             </div>
 
             <div>
-                <label>Are you not registered yet?</label>
+                <label>Haven't you registered yet?</label>
                 <a href="/signup">Sign up</a>
             </div>
 

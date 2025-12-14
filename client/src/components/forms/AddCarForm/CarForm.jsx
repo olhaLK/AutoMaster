@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import {PostCar} from "../../../store/features/cars.js";
+import './CarForm.css'
 
 
 const CarScheme = Yup.object({
@@ -14,18 +15,17 @@ const CarScheme = Yup.object({
     Price: Yup.number().positive().required("Price is required"),
     Color: Yup.string().required("Color is required"),
     Mileage: Yup.number().min(0).required("Mileage is required"),
-    ImageURL: Yup.string().url("Invalid URL").required("Main image is required"),
+    ImgURL: Yup.string().url("Invalid URL").required("Main image is required"),
     SliderImages: Yup.string()
         .required("Slider images are required")
-        .test(
-            "valid-urls",
-            "Each value must be a valid URL",
-            value =>
-                value
-                    ?.split(",")
-                    .map(v => v.trim())
-                    .every(v => Yup.string().url().isValidSync(v))
-        )
+        .test("valid-json", "Must be valid JSON array", value => {
+            try {
+                const parsed = JSON.parse(value);
+                return Array.isArray(parsed) && parsed.every(v => typeof v === "string");
+            } catch {
+                return false;
+            }
+        })
 });
 
 function CarForm() {
@@ -38,26 +38,20 @@ function CarForm() {
             Price: "",
             Color: "",
             Mileage: "",
-            ImageURL: "",
-            SliderImages: ""
+            ImgURL: "",
+            SliderImages: "[]"
         },
 
         validationSchema: CarScheme,
 
         onSubmit: values => {
-            const payload = {
-                ...values,
-                SliderImages: values.SliderImages
-                    .split(",")
-                    .map(v => v.trim())
-            };
-
-            dispatch(PostCar(values, payload));
+            dispatch(PostCar(values));
+            formik.resetForm();
         }
     });
 
     return (
-        <form className="CarForm" onSubmit={formik.handleSubmit}>
+        <form className="carForm" onSubmit={formik.handleSubmit}>
 
             <input placeholder="Brand" {...formik.getFieldProps("Brand")} />
             <input placeholder="Model" {...formik.getFieldProps("Model")} />
@@ -88,12 +82,12 @@ function CarForm() {
 
             <input
                 placeholder="Main image URL"
-                {...formik.getFieldProps("ImageURL")}
+                {...formik.getFieldProps("ImgURL")}
             />
 
             <textarea
                 rows={3}
-                placeholder="Slider images URLs (comma separated)"
+                placeholder='["https://img1.jpg", "https://img2.jpg"]'
                 {...formik.getFieldProps("SliderImages")}
             />
 

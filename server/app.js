@@ -24,8 +24,8 @@ const CarSchema = new mongoose.Schema({
     Price: Number,
     Color: String,
     Mileage: Number,
-    ImageURL: String,
-    SliderImages: [String],
+    ImgURL: String,
+    SliderImages: String,
 }, { timestamps: true });
 
 const Car = mongoose.model("Car", CarSchema, "Cars");
@@ -89,6 +89,34 @@ app.get('/api/cars/:id', async (req, res) => {
         res.status(404).json({ error: "Car not found" });
     }
 });
+
+
+app.post('/api/register', (req, res) => {
+    try{
+        const user = req.body;
+        res.json(user);
+    }
+    catch(err){
+        res.status(500).json({ error: 'Error registering user' });
+    }
+});
+
+app.post("/api/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+        return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    res.json({ message: "Login successful" });
+});
+
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

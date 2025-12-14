@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import './CarPage.scss';
 
 const CarPage = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
 
     const [car, setCar] = useState(null);
@@ -15,21 +15,30 @@ const CarPage = () => {
             .then(res => res.json())
             .then(data => {
                 setCar(data);
-                if (
-                    Array.isArray(data.SliderImages) &&
-                    typeof data.SliderImages[0] === "string" &&
-                    data.SliderImages[0].startsWith("[")
-                ) {
-                    setImages(JSON.parse(data.SliderImages[0]));
-                } else {
-                    setImages(data.SliderImages || []);
+
+                let imgs = [];
+
+                if (Array.isArray(data.SliderImages)) {
+                    imgs = data.SliderImages;
+                } else if (typeof data.SliderImages === "string") {
+                    try {
+                        imgs = JSON.parse(data.SliderImages);
+                    } catch (e) {
+                        console.error("Invalid SliderImages JSON", e);
+                    }
                 }
+
+                setImages(imgs);
+                setIndex(0);
             });
     }, [id]);
 
-    if (!car || !images.length) {
+
+    if (!car) {
         return <div>Loading...</div>;
     }
+
+    console.log(car);
 
     const handleNext = () =>
         setIndex((prev) => (prev + 1) % images.length);

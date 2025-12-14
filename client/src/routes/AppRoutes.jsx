@@ -15,6 +15,7 @@ import AdminOrdersListPage from '../pages/AdminOrdersListPage/AdminOrdersListPag
 import AdminTestDrivesListPage from '../pages/AdminTestDrivesListPage/AdminTestDrivesListPage';
 import AdminCarsListPage from '../pages/AdminCarsListPage/AdminCarsListPage';
 import AddCarPage from "../pages/AddCar/AddCarPage.jsx";
+import EditCar from "../pages/EditCar/EditCar.jsx";
 
 
 export default function AppRoutes() {
@@ -39,7 +40,7 @@ export default function AppRoutes() {
         <Route path="/admin/orders" element={<AdminOrdersListPage />} />
         <Route path="/admin/test-drives" element={<AdminTestDrivesListPage />} />
         <Route path="/admin/cars" element={<AdminCarsListPage />} />
-
+        <Route path="/car/:id/edit" element={<EditCar />} />
 
         <Route path="*" element={<Page404 />} />
     </Routes>
