@@ -1,0 +1,17 @@
+.page-404 {
+  background-color: #222125;
+  text-align: center;
+  overflow: hidden; // чтобы ничего не вылезало
+}
+
+.page-404 img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+
+  max-height: 65vh;   // 🔑 КЛЮЧЕВАЯ СТРОКА
+  object-fit: contain;
+
+  display: block;
+  margin: 0 auto;
+}
