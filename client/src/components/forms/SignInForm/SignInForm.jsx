@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
-import './SignInForm.css'
+import './SignInForm.scss';
 
 
 const SignInScheme = Yup.object({
