@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+
 
 const app = express();
 const PORT = 3000;
@@ -31,7 +33,31 @@ const CarSchema = new mongoose.Schema({
 const Car = mongoose.model("Car", CarSchema, "Cars");
 
 
+const UserSchema = new mongoose.Schema({
+    UserName: {
+        type: String,
+        required: true,
+    },
+    Email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    Password: {
+        type: String,
+        required: true,
+    },
+    Phone: {
+        type: String,
+    },
+    Role: {
+        type: String,
+        enum: ['User', 'Admin'],
+        default: 'User',
+    },
+}, { timestamps: true });
 
+const User = mongoose.model('User', UserSchema, 'Users');
 
 
 app.get('/api/cars', async (req, res) => {
@@ -81,6 +107,7 @@ app.delete('/api/cars/:id', async (req, res) => {
     }
 });
 
+
 app.get('/api/cars/:id', async (req, res) => {
     try {
         const car = await Car.findById(req.params.id);
@@ -91,30 +118,68 @@ app.get('/api/cars/:id', async (req, res) => {
 });
 
 
-app.post('/api/register', (req, res) => {
-    try{
-        const user = req.body;
-        res.json(user);
-    }
-    catch(err){
-        res.status(500).json({ error: 'Error registering user' });
+app.post('/api/register', async (req, res) => {
+    try {
+        const { UserName, Email, Password, Phone, Role } = req.body;
+
+        const existingUser = await User.findOne({ Email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+
+        const hashedPassword = await bcrypt.hash(Password, 10);
+
+        const newUser = await User.create({
+            UserName,
+            Email,
+            Password: hashedPassword,
+            Phone,
+            Role: Role || 'User',
+        });
+
+        res.status(201).json({
+            id: newUser._id,
+            UserName: newUser.UserName,
+            Email: newUser.Email,
+            Phone: newUser.Phone,
+            Role: newUser.Role,
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Registration error' });
     }
 });
 
-app.post("/api/login", async (req, res) => {
-    const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user) {
-        return res.status(401).json({ message: "Invalid credentials" });
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ Email: email });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.Password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        res.json({
+            user: {
+                id: user._id,
+                UserName: user.UserName,
+                Email: user.Email,
+                Phone: user.Phone,
+                Role: user.Role,
+            }
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Login error' });
     }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-        return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    res.json({ message: "Login successful" });
 });
 
 

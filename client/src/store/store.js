@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import carsReducer from './features/cars';
+import authReducer from './features/auth';
 
 //Make a reducers for
 
@@ -13,5 +14,6 @@ import carsReducer from './features/cars';
 export const store = configureStore({
     reducer: {
         cars: carsReducer,
+        auth: authReducer,
     },
-    });
+});
