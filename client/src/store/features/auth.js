@@ -20,6 +20,7 @@ const authSlice = createSlice({
         restoreSession(state, action) {
             state.user = action.payload;
             state.isAuth = true;
+            state.status = 'succeeded'
         },
     },
     extraReducers: (builder) => {

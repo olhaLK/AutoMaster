@@ -9,40 +9,48 @@ import CartPage from '../pages/CartPage/CartPage';
 import SignUpPage from '../pages/SignUpPage/SignUpPage';
 import SignInPage from '../pages/SignInPage/SignInPage';
 import Page404 from '../pages/Page404/Page404';
-import AdminMainPage from '../pages/AdminMainPage/AdminMainPage';
 import AdminClientsListPage from '../pages/AdminClientsListPage/AdminClientsListPage';
 import AdminOrdersListPage from '../pages/AdminOrdersListPage/AdminOrdersListPage';
 import AdminTestDrivesListPage from '../pages/AdminTestDrivesListPage/AdminTestDrivesListPage';
-import AdminCarsListPage from '../pages/AdminCarsListPage/AdminCarsListPage';
 import AddCarPage from "../pages/AddCar/AddCarPage.jsx";
 import EditCar from "../pages/EditCar/EditCar.jsx";
+import ProtectedRoute from './ProtectedRoute.jsx';
 
 
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* user. todo: visit those pages can only authing user */}
+      {/* public */}
+      <Route path="/" element={<MainPage />} />
+      <Route path="*" element={<Page404 />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/signin" element={<SignInPage />} />
+
+      {/* admin */}
+      <Route element={<ProtectedRoute roles={['Admin']} />}>
         <Route path="/cars/add" element={<AddCarPage />} />
-        <Route path="/" element={<MainPage />} />
+        <Route path="/admin/clients" element={<AdminClientsListPage />} />
+        <Route path="/admin/orders" element={<AdminOrdersListPage />} />
+        <Route path="/admin/test-drives" element={<AdminTestDrivesListPage />} />
+        <Route path="/car/:id/edit" element={<EditCar />} />
+      </Route>
+
+      {/* user */}
+      <Route element={<ProtectedRoute roles={['User']} />}>
         <Route path="/cars" element={<CatalogPage />} />
         <Route path="/cars/:id" element={<CarPage />} />
         <Route path="/order/:id" element={<OrderCarPage />} />
         <Route path="/test-drive" element={<TestDriveFormPage />} />
+        {/* 
+        tracking = orders = test drives 
+        ------
+        it can be viewing on the same page. this page shows us status of any order
+        and info about date/time to pick up car or date/time to test drives.
+        */}
         <Route path="/tracking" element={<TrackingPage />} />
         <Route path="/cart" element={<CartPage />} />
+      </Route>
 
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/signin" element={<SignInPage />} />
-
-        {/* admin. todo: visit those pages can only admin */}
-        <Route path="/admin" element={<AdminMainPage />} />
-        <Route path="/admin/clients" element={<AdminClientsListPage />} />
-        <Route path="/admin/orders" element={<AdminOrdersListPage />} />
-        <Route path="/admin/test-drives" element={<AdminTestDrivesListPage />} />
-        <Route path="/admin/cars" element={<AdminCarsListPage />} />
-        <Route path="/car/:id/edit" element={<EditCar />} />
-
-        <Route path="*" element={<Page404 />} />
     </Routes>
   )
 }
