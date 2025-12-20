@@ -1,55 +1,60 @@
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../../store/features/users";
 import * as Yup from "yup";
 import './SignUpForm.scss';
 
 
 const SignUpSheme = Yup.object({
-    fullname: Yup.string()
-        .min(3, 'Too short')
-        .max(50, 'Too long')
-        .required('Required'),
-
+    login: Yup.string().required('Required'),
     email: Yup.string()
         .email('Invalid email format')
         .required('Required'),
-
     phone: Yup.string()
         .matches(/^\+?\d{7,15}$/, 'Invalid phone number')
         .required('Required'),
-    login: Yup.string().required('Required'),
     password: Yup.string().required('Required'),
 
 })
 
 export default function SignUpForm() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {
-            fullname: '',
+            login: '',
             email: '',
             phone: '',
-            login: '',
             password: '',
-
+            role: 'User',
         },
         validationSchema: SignUpSheme,
         onSubmit: values => {
+            const payload = {
+                UserName: values.login,
+                Email: values.email,
+                Phone: values.phone,
+                Password: values.password,
+                Role: values.role,
+            }
+
+            dispatch(registerUser(payload));
             navigate('/signin');
         },
     })
 
     return (
         <form className="signup-form" onSubmit={formik.handleSubmit}>
-            <div className="signup-container"> 
-                {formik.errors.fullname && <div className="error-message">{formik.errors.fullname}</div>}
-                <label htmlFor="fullname" className="signup-label">Full name: </label>
+            <div className="signup-container">
+                {formik.errors.login && <div className='error-message'>{formik.errors.login}</div>}
+                <label htmlFor="login" className="signup-label">Login</label>
                 <input
                     type="text"
-                    name="fullname"
-                    placeholder="Enter your full name"
-                    value={formik.values.fullname}
+                    name="login"
+                    placeholder="Enter login"
+                    value={formik.values.login}
                     onChange={formik.handleChange}
                     className="signup-input"
                 />
@@ -82,19 +87,6 @@ export default function SignUpForm() {
             </div>
 
             <div className="signup-container">
-                {formik.errors.login && <div className='error-message'>{formik.errors.login}</div>}
-                <label htmlFor="login" className="signup-label">Login</label>
-                <input
-                    type="text"
-                    name="login"
-                    placeholder="Enter login"
-                    value={formik.values.login}
-                    onChange={formik.handleChange}
-                    className="signup-input"
-                />
-            </div>
-            
-            <div className="signup-container">
                 {formik.errors.password && <div className='error-message'>{formik.errors.password}</div>}
                 <label htmlFor="password" className="signup-label">Password</label>
                 <input
@@ -105,6 +97,19 @@ export default function SignUpForm() {
                     onChange={formik.handleChange}
                     className="signup-input"
                 />
+            </div>
+
+            <div className="signup-container">
+                <label htmlFor="role" className="signup-label">Role</label>
+                <select
+                    name="role"
+                    value={formik.values.role}
+                    onChange={formik.handleChange}
+                    className="signup-input"
+                >
+                    <option value="User">User</option>
+                    <option value="Admin">Admin</option>
+                </select>
             </div>
 
             <button type="submit" className="signup-btn-submit">Sign up</button>

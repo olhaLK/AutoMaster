@@ -5,9 +5,7 @@
 @use './variables' as *;
 @use './reset' as *;
 @use './App';
-@use '../pages/AdminCarsListPage/AdminCarsListPage.scss';
 @use '../pages/AdminClientsListPage/AdminClientsListPage.scss';
-@use '../pages/AdminMainPage/AdminMainPage.scss';
 @use '../pages/AdminOrdersListPage/AdminOrdersListPage.scss';
 @use '../pages/AdminTestDrivesListPage/AdminTestDrivesListPage.scss';
 @use '../pages/CarPage/CarPage.scss';
