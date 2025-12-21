@@ -35,21 +35,17 @@ export default function AppRoutes() {
         <Route path="/car/:id/edit" element={<EditCar />} />
       </Route>
 
-      {/* user */}
+      {/* user (protected) */}
       <Route element={<ProtectedRoute roles={['User']} />}>
         <Route path="/cars" element={<CatalogPage />} />
         <Route path="/cars/:id" element={<CarPage />} />
         <Route path="/order/:id" element={<OrderCarPage />} />
-        <Route path="/test-drive" element={<TestDriveFormPage />} />
-        {/* 
-        tracking = orders = test drives 
-        ------
-        it can be viewing on the same page. this page shows us status of any order
-        and info about date/time to pick up car or date/time to test drives.
-        */}
-        <Route path="/tracking" element={<TrackingPage />} />
         <Route path="/cart" element={<CartPage />} />
       </Route>
+
+      {/* public pages for booking and tracking (available without auth) */}
+      <Route path="/test-drive" element={<TestDriveFormPage />} />
+      <Route path="/tracking" element={<TrackingPage />} />
 
     </Routes>
   )

@@ -32,6 +32,38 @@ const CarSchema = new mongoose.Schema({
 
 const Car = mongoose.model("Car", CarSchema, "Cars");
 
+const TestDriveSchema = new mongoose.Schema({
+    fullname: String,
+    email: String,
+    phone: String,
+    preferredDate: String,
+    preferredTime: String,
+    comment: String,
+}, { timestamps: true });
+
+const TestDrive = mongoose.model('TestDrive', TestDriveSchema, 'TestDrives');
+
+const OrderSchema = new mongoose.Schema({
+    fullname: String,
+    email: String,
+    phone: String,
+    address: String,
+    date: String,
+    time: String,
+    comment: String,
+    type: {
+        type: String,
+        enum: ['purchase', 'test-drive'],
+        default: 'purchase'
+    },
+    progress: {
+        type: String,
+        default: 'in process'
+    }
+}, { timestamps: true });
+
+const Order = mongoose.model('Order', OrderSchema, 'Orders');
+
 
 const UserSchema = new mongoose.Schema({
     UserName: {
@@ -114,6 +146,79 @@ app.get('/api/cars/:id', async (req, res) => {
         res.json(car);
     } catch (err) {
         res.status(404).json({ error: "Car not found" });
+    }
+});
+
+// Test-drives endpoints
+app.post('/api/test-drives', async (req, res) => {
+    try {
+        const td = await TestDrive.create(req.body);
+
+        // Also create an order entry so test-drive appears in orders
+        const order = await Order.create({
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone: req.body.phone,
+            date: req.body.preferredDate || req.body.date,
+            time: req.body.preferredTime || req.body.time,
+            comment: req.body.comment,
+            type: 'test-drive',
+            progress: 'scheduled'
+        });
+
+        res.status(201).json({ testDrive: td, order });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error creating test drive' });
+    }
+});
+
+app.get('/api/test-drives', async (req, res) => {
+    try {
+        const tds = await TestDrive.find().sort({ createdAt: -1 });
+        res.json(tds);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error fetching test drives' });
+    }
+});
+
+app.get('/api/test-drives/:id', async (req, res) => {
+    try {
+        const td = await TestDrive.findById(req.params.id);
+        res.json(td);
+    } catch (error) {
+        res.status(404).json({ error: 'Test drive not found' });
+    }
+});
+
+// Orders endpoints
+app.post('/api/orders', async (req, res) => {
+    try {
+        const order = await Order.create(req.body);
+        res.status(201).json(order);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error creating order' });
+    }
+});
+
+app.get('/api/orders', async (req, res) => {
+    try {
+        const orders = await Order.find().sort({ createdAt: -1 });
+        res.json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error fetching orders' });
+    }
+});
+
+app.get('/api/orders/:id', async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        res.json(order);
+    } catch (error) {
+        res.status(404).json({ error: 'Order not found' });
     }
 });
 

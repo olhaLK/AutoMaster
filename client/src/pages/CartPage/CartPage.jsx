@@ -1,4 +1,7 @@
 
+const items = [];
+const handleDelete = () => {};
+
 const CartPage = () => {
   return (
     <div>
@@ -14,11 +17,11 @@ const CartPage = () => {
           <li key={index}>
             <div>
               <span>{car.name}</span>
-              <span>{car.short-description}</span>
+              <span>{car['short-description']}</span>
             </div>
 
             <span>{car.price}</span>
-            <button type="button" onClick={() => handleDelete}></button>            
+            <button type="button" onClick={() => handleDelete()}></button>            
           </li>
         )
       )}
