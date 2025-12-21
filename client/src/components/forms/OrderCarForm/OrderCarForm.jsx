@@ -43,7 +43,7 @@ export default function OrderCarPage() {
       comment: '',
     },
     validationSchema: OrderCarScheme,
-    onSubmit: values => {
+    onSubmit: () => {
       //todo: this car added to the cart list
       navigate('/cars');
     },

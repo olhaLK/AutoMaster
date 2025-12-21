@@ -3,20 +3,20 @@ import axios from 'axios';
 
 // Async thunk to fetch cars from an API
 export const fetchCars = createAsyncThunk('cars/fetchCars', async () => {
-    const response = await axios.get('http://localhost:3000/api/cars');
-    return response.data;
+    const { data } = await axios.get('http://localhost:3000/api/cars');
+    return data;
 });
 export const PostCar = createAsyncThunk('cars/PostCar', async (newCar) => {
-    const response = await axios.post('http://localhost:3000/api/cars', newCar);
-    return response.data;
+    const { data } = await axios.post('http://localhost:3000/api/cars', newCar);
+    return data;
 });
 export const DeleteCar = createAsyncThunk('cars/deleteCar', async (id) => {
-    const response = await axios.delete(`http://localhost:3000/api/cars/${id}`);
+    await axios.delete(`http://localhost:3000/api/cars/${id}`);
     return id;
 });
 export const UpdateCar = createAsyncThunk('cars/updateCar', async (car) => {
-    const response = await axios.put(`http://localhost:3000/api/cars/${car._id}`, car);
-    return response.data;
+    const { data } = await axios.put(`http://localhost:3000/api/cars/${car._id}`, car);
+    return data;
 })
 
 const carsSlice = createSlice({

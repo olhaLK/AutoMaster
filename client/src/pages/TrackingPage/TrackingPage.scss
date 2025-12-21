@@ -1,0 +1,73 @@
+
+@use '../../styles/_variables' as vars;
+
+.tracking-page {
+  /* full-width background, original vertical sizing restored */
+  background: #070707;
+  color: #eaeaea;
+  padding: 1.25rem 1.25rem;
+  display: block;
+
+  .tracking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    input {
+      padding: 0.5rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.02);
+      color: #eaeaea;
+    }
+
+    .actions { margin-top: 0.5rem; }
+  }
+
+  .error { color: #f28b82; }
+
+  .tracking-result { margin-top: 1rem; }
+}
+
+.content-wrap {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding: 1.5rem 2rem;
+    border-radius: vars.$radius;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    color: #eaeaea;
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+.orders-section, .testdrives-section { margin-bottom: 2rem; }
+
+.simple-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.simple-table thead th {
+  text-align: left;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  color: #fff;
+}
+
+.simple-table tbody td {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+
+.muted { color: rgba(255,255,255,0.65); font-size: 14px; }
+
+.orders-section h2, .testdrives-section h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: vars.$accent;
+}
+
+.simple-table tbody tr td:first-child { width: 60%; }
+
+

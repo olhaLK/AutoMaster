@@ -24,8 +24,8 @@ function Header() {
             </div>
 
             <nav className="header-menu">
-                <a href="/orders">Orders</a>
-                <a href="/test-drives">Test Drives</a>
+                <a href="/tracking">Orders</a>
+                <a href="/test-drive">Test Drives</a>
                 <a href="/cars">Catalog</a>
                 <a href="/">Main</a>
             </nav>
