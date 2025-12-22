@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
 
 
@@ -43,8 +44,16 @@ export default function OrderCarPage() {
       comment: '',
     },
     validationSchema: OrderCarScheme,
-    onSubmit: () => {
-      //todo: this car added to the cart list
+    onSubmit: async (values) => {
+      const sessionId = localStorage.getItem('sessionId');
+
+      await axios.post('http://localhost:3000/api/orders', {
+        carId: id,
+        ...values,
+      }, {
+        headers: { 'x-session-id': sessionId }
+      })
+
       navigate('/cars');
     },
   })

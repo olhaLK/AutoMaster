@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 
 const app = express();
@@ -10,6 +11,15 @@ const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
+
+const sessions = {};
+
+function authRequired(req, res, next) {
+    const sessionId = req.headers['x-session-id'];
+    req.userId = sessions[sessionId];
+    next();
+}
+
 
 
 mongoose.connect(
@@ -33,17 +43,25 @@ const CarSchema = new mongoose.Schema({
 const Car = mongoose.model("Car", CarSchema, "Cars");
 
 const TestDriveSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    carId: { type: mongoose.Schema.Types.ObjectId, required: true },
+
     fullname: String,
     email: String,
     phone: String,
     preferredDate: String,
     preferredTime: String,
     comment: String,
+
+    status: { type: String, default: 'requested' },
 }, { timestamps: true });
 
 const TestDrive = mongoose.model('TestDrive', TestDriveSchema, 'TestDrives');
 
 const OrderSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    carId: { type: mongoose.Schema.Types.ObjectId, required: true },
+
     fullname: String,
     email: String,
     phone: String,
@@ -51,6 +69,9 @@ const OrderSchema = new mongoose.Schema({
     date: String,
     time: String,
     comment: String,
+
+    status: { type: String, default: 'in_process' },
+
     type: {
         type: String,
         enum: ['purchase', 'test-drive'],
@@ -149,19 +170,34 @@ app.get('/api/cars/:id', async (req, res) => {
     }
 });
 
-// Test-drives endpoints
-app.post('/api/test-drives', async (req, res) => {
+app.post('/api/test-drives', authRequired, async (req, res) => {
     try {
-        const td = await TestDrive.create(req.body);
+        const td = await TestDrive.create({
+            userId: req.userId,
+            carId: req.body.carId,
 
-        // Also create an order entry so test-drive appears in orders
-        const order = await Order.create({
             fullname: req.body.fullname,
             email: req.body.email,
             phone: req.body.phone,
-            date: req.body.preferredDate || req.body.date,
-            time: req.body.preferredTime || req.body.time,
+            preferredDate: req.body.preferredDate || null,
+            preferredTime: req.body.preferredTime || null,
             comment: req.body.comment,
+
+            status: 'requested',
+        });
+
+        const order = await Order.create({
+            userId: req.userId,
+            carId: req.body.carId,
+
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone: req.body.phone,
+            date: req.body.preferredDate || '',
+            time: req.body.preferredTime || '',
+            comment: req.body.comment,
+
+            status: 'scheduled',
             type: 'test-drive',
             progress: 'scheduled'
         });
@@ -192,24 +228,29 @@ app.get('/api/test-drives/:id', async (req, res) => {
     }
 });
 
-// Orders endpoints
-app.post('/api/orders', async (req, res) => {
+app.post('/api/orders', authRequired, async (req, res) => {
     try {
-        const order = await Order.create(req.body);
+        const order = await Order.create({
+            userId: req.userId,
+            carId: req.body.carId,
+
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            date: req.body.date,
+            time: req.body.time,
+            comment: req.body.comment,
+
+            status: 'in_process',
+            type: 'purchase',
+            progress: 'in process',
+        });
+
         res.status(201).json(order);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error creating order' });
-    }
-});
-
-app.get('/api/orders', async (req, res) => {
-    try {
-        const orders = await Order.find().sort({ createdAt: -1 });
-        res.json(orders);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error fetching orders' });
     }
 });
 
@@ -271,6 +312,9 @@ app.post('/api/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
+        const sessionId = crypto.randomUUID();
+        sessions[sessionId] = user._id;
+
         res.json({
             user: {
                 id: user._id,
@@ -278,7 +322,8 @@ app.post('/api/login', async (req, res) => {
                 Email: user.Email,
                 Phone: user.Phone,
                 Role: user.Role,
-            }
+            },
+            sessionId,
         });
 
     } catch (error) {
@@ -286,7 +331,6 @@ app.post('/api/login', async (req, res) => {
         res.status(500).json({ message: 'Login error' });
     }
 });
-
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

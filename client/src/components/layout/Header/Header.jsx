@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo from '../../../assets/logo.png';
+import cart from '../../../assets/cart.svg';
 
 
 
@@ -24,10 +25,12 @@ function Header() {
             </div>
 
             <nav className="header-menu">
-                <a href="/tracking">Orders</a>
-                <a href="/test-drive">Test Drives</a>
+                <a href="/tracking">Orders/Test-drives</a>
                 <a href="/cars">Catalog</a>
                 <a href="/">Main</a>
+                <a href="/cart">
+                    <img src={cart} alt="cart" className="header-menu-cart"/>
+                </a>
             </nav>
 
             <div className="header-signs">

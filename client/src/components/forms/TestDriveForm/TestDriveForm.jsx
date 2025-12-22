@@ -9,7 +9,6 @@ const TestDriveSchema = Yup.object({
   fullname: Yup.string().min(3, 'Too short').max(50, 'Too long').required('Required'),
   email: Yup.string().email('Invalid email format').required('Required'),
   phone: Yup.string().matches(/^\+?\d{7,15}$/, 'Invalid phone number').required('Required'),
-  // make date/time optional so user can request without selecting them
   preferredDate: Yup.date().nullable(),
   preferredTime: Yup.string().nullable(),
   comment: Yup.string().max(300, 'Comment too long'),
@@ -39,11 +38,9 @@ export default function TestDriveForm() {
           comment: values.comment,
         };
         await axios.post('http://localhost:3000/api/test-drives', payload);
-        // navigate to tracking (orders) page after creation
         navigate('/tracking');
       } catch (err) {
         console.error('Failed to create test drive', err);
-        // could show an error to user
       }
     },
   });

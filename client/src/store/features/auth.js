@@ -16,6 +16,7 @@ const authSlice = createSlice({
             state.isAuth = false;
             state.status = 'idle';
             localStorage.removeItem('user');
+            localStorage.removeItem('sessionId');
         },
         restoreSession(state, action) {
             state.user = action.payload;
@@ -47,6 +48,7 @@ const authSlice = createSlice({
                 state.user = action.payload.user;
                 state.isAuth = true;
                 localStorage.setItem('user', JSON.stringify(action.payload.user));
+                localStorage.setItem('sessionId', action.payload.sessionId);
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.status = 'failed';
