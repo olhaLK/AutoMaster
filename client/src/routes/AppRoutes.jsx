@@ -41,12 +41,9 @@ export default function AppRoutes() {
         <Route path="/cars/:id" element={<CarPage />} />
         <Route path="/order/:id" element={<OrderCarPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/test-drive" element={<TestDriveFormPage />} />
+        <Route path="/tracking" element={<TrackingPage />} />
       </Route>
-
-      {/* public pages for booking and tracking (available without auth) */}
-      <Route path="/test-drive" element={<TestDriveFormPage />} />
-      <Route path="/tracking" element={<TrackingPage />} />
-
     </Routes>
   )
 }

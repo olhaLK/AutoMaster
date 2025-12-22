@@ -144,7 +144,7 @@ export default function OrderCarPage() {
       </div>
 
       <button type="submit">Add to cart</button>
-      <button type="button" onClick={() => navigate(`/cars/${id}/details`)}>Cancel</button>
+      <button type="button" onClick={() => navigate(`/cars/${id}`)}>Cancel</button>
     </form>
 
   )
