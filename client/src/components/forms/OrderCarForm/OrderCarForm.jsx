@@ -1,6 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import './OrderCarForm.scss';
 
 
 
@@ -28,7 +30,7 @@ const OrderCarScheme = Yup.object({
 })
 
 
-export default function OrderCarPage() {
+export default function OrderCarForm() {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -43,14 +45,22 @@ export default function OrderCarPage() {
       comment: '',
     },
     validationSchema: OrderCarScheme,
-    onSubmit: () => {
-      //todo: this car added to the cart list
+    onSubmit: async (values) => {
+      const sessionId = localStorage.getItem('sessionId');
+
+      await axios.post('http://localhost:3000/api/orders', {
+        carId: id,
+        ...values,
+      }, {
+        headers: { 'x-session-id': sessionId }
+      })
+
       navigate('/cars');
     },
   })
 
   return (
-    <form className="orderCarForm" onSubmit={formik.handleSubmit}>
+    <form className="orderForm" onSubmit={formik.handleSubmit}>
       <h3>Order Car</h3>
 
       <div>
@@ -135,7 +145,7 @@ export default function OrderCarPage() {
       </div>
 
       <button type="submit">Add to cart</button>
-      <button type="button" onClick={() => navigate(`/cars/${id}/details`)}>Cancel</button>
+      <button type="button" onClick={() => navigate(`/cars/${id}`)}>Cancel</button>
     </form>
 
   )
