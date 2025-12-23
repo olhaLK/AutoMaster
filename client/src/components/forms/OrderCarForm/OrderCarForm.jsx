@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import './OrderCarForm.scss';
 
 
 
@@ -29,7 +30,7 @@ const OrderCarScheme = Yup.object({
 })
 
 
-export default function OrderCarPage() {
+export default function OrderCarForm() {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -59,7 +60,7 @@ export default function OrderCarPage() {
   })
 
   return (
-    <form className="orderCarForm" onSubmit={formik.handleSubmit}>
+    <form className="orderForm" onSubmit={formik.handleSubmit}>
       <h3>Order Car</h3>
 
       <div>

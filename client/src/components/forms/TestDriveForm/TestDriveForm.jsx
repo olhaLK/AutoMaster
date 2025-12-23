@@ -14,7 +14,7 @@ const TestDriveSchema = Yup.object({
   comment: Yup.string().max(300, 'Comment too long'),
 });
 
-export default function TestDriveForm() {
+export default function TestDriveForm({ carId }) {
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -29,15 +29,19 @@ export default function TestDriveForm() {
     validationSchema: TestDriveSchema,
     onSubmit: async (values) => {
       try {
-        const payload = {
+        const sessionId = localStorage.getItem('sessionId');
+
+        await axios.post('http://localhost:3000/api/test-drives', {
+          carId,
           fullname: values.fullname,
           email: values.email,
           phone: values.phone,
           preferredDate: values.preferredDate || null,
           preferredTime: values.preferredTime || null,
           comment: values.comment,
-        };
-        await axios.post('http://localhost:3000/api/test-drives', payload);
+        }, {
+          headers: { 'x-session-id': sessionId }
+        });
         navigate('/tracking');
       } catch (err) {
         console.error('Failed to create test drive', err);

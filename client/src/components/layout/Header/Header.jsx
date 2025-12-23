@@ -38,9 +38,7 @@ function Header() {
 
             <nav className="header-menu">
                 {/* guest */}
-                {!isAuth && (
-                    <a href="/">Main</a>
-                )}
+                {!isAuth && null}
 
                 {/* user */}
                 {isAuth && !isAdmin && (
