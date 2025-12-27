@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import carsReducer from './features/cars';
 import authReducer from './features/auth';
+import testDrivesReducer from './features/test-drives';
 
 //Make a reducers for
 
@@ -15,5 +16,6 @@ export const store = configureStore({
     reducer: {
         cars: carsReducer,
         auth: authReducer,
+        testDrives: testDrivesReducer,
     },
 });

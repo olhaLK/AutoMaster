@@ -42,7 +42,7 @@ export default function TestDriveForm({ carId }) {
         }, {
           headers: { 'x-session-id': sessionId }
         });
-        navigate('/tracking');
+        navigate(-1);
       } catch (err) {
         console.error('Failed to create test drive', err);
       }

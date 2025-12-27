@@ -14,12 +14,18 @@ app.use(express.json());
 
 const sessions = {};
 
+
 function authRequired(req, res, next) {
     const sessionId = req.headers['x-session-id'];
-    req.userId = sessions[sessionId];
+    const userId = sessions[sessionId];
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    req.userId = userId;
     next();
 }
-
 
 
 mongoose.connect(

@@ -11,7 +11,7 @@ const TestDriveFormPage = () => {
       <div className="page-content">
         <div className="card-wrap">
           <div className="card">
-            <TestDriveForm cardId={id} />
+            <TestDriveForm carId={id} />
           </div>
         </div>
       </div>
