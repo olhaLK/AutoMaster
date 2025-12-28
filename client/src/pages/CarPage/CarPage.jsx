@@ -69,7 +69,7 @@ const CarPage = () => {
             <button onClick={() => navigate(`/order/${id}`)} className="pageBtn">
                 Buy now
             </button>
-            <button type="button" className="pageBtn">
+            <button onClick={() => navigate(`/test-drive/${id}`)} type="button" className="pageBtn">
                 Sign up for a test drive
             </button>
 
