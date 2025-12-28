@@ -36,7 +36,7 @@ export default function AppRoutes() {
       </Route>
 
       {/* user (protected) */}
-      <Route element={<ProtectedRoute roles={['User']} />}>
+      <Route element={<ProtectedRoute roles={['User','Admin']} />}>
         <Route path="/cars" element={<CatalogPage />} />
         <Route path="/cars/:id" element={<CarPage />} />
         <Route path="/order/:id" element={<OrderCarPage />} />

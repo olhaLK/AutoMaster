@@ -20,7 +20,7 @@ function Footer() {
 
                 <div className="footer-section">
                     <p className="footer-title">AutoMaster</p>
-                    <p>© 2024 AutoMaster. All rights reserved.</p>
+                    <p>© 2025 AutoMaster. All rights reserved.</p>
                 </div>
 
                 <div className="footer-section">

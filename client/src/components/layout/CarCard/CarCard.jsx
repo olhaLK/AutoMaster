@@ -1,12 +1,13 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import './CarCard.css';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {DeleteCar} from "../../../store/features/cars.js";
 
 function CarCard({_id, name, price, ImgURL, mileage}) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const user = useSelector(state => state.auth?.user);
 
     const handleNavigate = (e) => {
         e.preventDefault();
@@ -32,8 +33,13 @@ function CarCard({_id, name, price, ImgURL, mileage}) {
 
             <button type="button" onClick={handleNavigate} className="viewDetails">View Details</button>
 
-            <button className="deleteBtn" onClick={handleDelete}>X</button>
-            <button className="editBtn" onClick={handleEdit}>Edit</button>
+            {user?.Role === 'Admin' && (
+                <>
+                    <button className="deleteBtn" onClick={handleDelete}>X</button>
+                    <button className="editBtn" onClick={handleEdit}>Edit</button>
+                </>
+            )}
+
         </div>
     );
 }
