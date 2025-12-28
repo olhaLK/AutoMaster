@@ -8,6 +8,8 @@ const CatalogPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { carsList, status, error } = useSelector(state => state.cars);
+    const user = useSelector(state => state.auth?.user);
+
     useEffect(() => {
         dispatch(fetchCars());
     }, [dispatch]);
@@ -22,7 +24,11 @@ const CatalogPage = () => {
 
     return (
         <div className="catalog-page">
-            <button type="button" className="btn-add-car" onClick={HandleNavigate}>Add New Car</button>
+            {user?.Role === 'Admin' && (
+            <button type="button" className="btn-add-car" onClick={HandleNavigate}>
+                Add New Car
+            </button>
+            )}
         <div className="car-list">
             {carsList.map(car => (
                 <CarCard

@@ -1,8 +1,8 @@
-import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import express from 'express';
 
 
 const app = express();
@@ -28,7 +28,7 @@ mongoose.connect(
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.error("MongoDB error:", err));
 
-
+//Schema for mongodb (car)
 const CarSchema = new mongoose.Schema({
     Brand: String,
     Model: String,
@@ -42,6 +42,7 @@ const CarSchema = new mongoose.Schema({
 
 const Car = mongoose.model("Car", CarSchema, "Cars");
 
+//Schema for mongodb (test drive)
 const TestDriveSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
     carId: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -58,6 +59,7 @@ const TestDriveSchema = new mongoose.Schema({
 
 const TestDrive = mongoose.model('TestDrive', TestDriveSchema, 'TestDrives');
 
+//Schema for mongodb (order)
 const OrderSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
     carId: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -85,7 +87,7 @@ const OrderSchema = new mongoose.Schema({
 
 const Order = mongoose.model('Order', OrderSchema, 'Orders');
 
-
+//Schema for mongodb (user)
 const UserSchema = new mongoose.Schema({
     UserName: {
         type: String,
@@ -112,7 +114,7 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', UserSchema, 'Users');
 
-
+//Back for cars
 app.get('/api/cars', async (req, res) => {
     try {
         const cars = await Car.find();
@@ -170,6 +172,7 @@ app.get('/api/cars/:id', async (req, res) => {
     }
 });
 
+//Back for test drives
 app.post('/api/test-drives', authRequired, async (req, res) => {
     try {
         const td = await TestDrive.create({
@@ -228,6 +231,31 @@ app.get('/api/test-drives/:id', async (req, res) => {
     }
 });
 
+app.delete('/api/test-drives/:id', async (req, res) => {
+    try {
+        const deletedTD = await TestDrive.findByIdAndDelete(req.params.id);
+        res.json({ message: "Test drive deleted", testDrive: deletedTD });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error deleting test drive' });
+    }
+})
+
+app.put('/api/test-drives/:id', authRequired, async (req, res) => {
+    try {
+        const updatedTD = await TestDrive.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.json(updatedTD);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error updating test drive' });
+    }
+})
+
+//Back for orders
 app.post('/api/orders', authRequired, async (req, res) => {
     try {
         const order = await Order.create({
@@ -263,7 +291,45 @@ app.get('/api/orders/:id', async (req, res) => {
     }
 });
 
+app.delete('/api/orders/:id', async (req, res) => {
+    try {
+        const deletedOrder = await Order.findByIdAndDelete(req.params.id);
+        res.json({ message: "Order deleted", order: deletedOrder });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error deleting order' });
+    }
+});
 
+app.put('/api/orders/:id', authRequired, async (req, res) => {
+    try {
+        const updatedOrder = await Order.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.json(updatedOrder);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error updating order' });
+    }
+})
+
+app.get('/api/orders', async (req, res) => {
+    try {
+        const orders = await Order
+            .find()
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error fetching orders' });
+    }
+});
+
+
+//Back for users (registration and login)
 app.post('/api/register', async (req, res) => {
     try {
         const { UserName, Email, Password, Phone, Role } = req.body;
@@ -333,4 +399,8 @@ app.post('/api/login', async (req, res) => {
 });
 
 
+
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
