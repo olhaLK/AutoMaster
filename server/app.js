@@ -340,3 +340,33 @@ app.post('/api/login', async (req, res) => {
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+app.post('/api/pay', authRequired, async (req, res) => {
+  const { items } = req.body;
+
+  for (const item of items) {
+    if (item.type === 'purchase') {
+      await Order.create({
+        userId: req.userId,
+        carId: item.id,
+        status: 'paid',
+        type: 'purchase',
+        progress: 'paid',
+      });
+    }
+
+    if (item.type === 'test-drive') {
+      await TestDrive.create({
+        userId: req.userId,
+        carId: item.id,
+        preferredDate: item.date,
+        preferredTime: item.time,
+        status: 'scheduled',
+      });
+    }
+  }
+
+  res.json({ success: true });
+})
+

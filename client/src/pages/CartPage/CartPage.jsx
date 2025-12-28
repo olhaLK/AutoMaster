@@ -1,33 +1,51 @@
-
-const items = [];
-const handleDelete = () => {};
+import { useState } from "react";
+import { getCart } from "../../utils/cartStorage";
 
 const CartPage = () => {
+  const [items, setItems] = useState(getCart());
+
+  const handleDelete = (id) => {
+    removeFromCart(id);
+    setItems(getCart());
+  }
+
+  const handlePay = async () => {
+    const sessionId = localStorage.getItem('sessionId');
+
+    await axios.post('http://localhost:3000/api/pay', {
+      items,
+    }, {
+      headers: { 'x-session-id': sessionId }
+    })
+
+    clearCart();
+    setItems([]);
+  }
+
   return (
     <div>
       <ul>
-        {/*item - car
-        name
-        short discription
-        price
-        ------
-        from order get car id 
-        */}
-        {items.map((car, index) => (
-          <li key={index}>
+        {items.map(item => (
+          <li key={item.id}>
+            <img src={item.image} width={80} />
+
             <div>
-              <span>{car.name}</span>
-              <span>{car['short-description']}</span>
+              <div>{item.name}</div>
+              {item.type === 'test-drive' ? (
+                <div>{item.date} {item.time}</div>
+              ) : (
+                <div>${item.price}</div>
+              )}
             </div>
 
-            <span>{car.price}</span>
-            <button type="button" onClick={() => handleDelete()}></button>            
+            <button type="button" onClick={() => handleDelete(item.id)}>Delete</button>
           </li>
-        )
-      )}
+        ))}
       </ul>
 
-      <button type="text">Pay now</button>
+      {items.length > 0 && (
+        <button onClick={handlePay}>Pay now</button>
+      )}
     </div>
   )
 }

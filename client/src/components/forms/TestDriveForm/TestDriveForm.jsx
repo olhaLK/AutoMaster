@@ -27,25 +27,18 @@ export default function TestDriveForm({ carId }) {
       comment: '',
     },
     validationSchema: TestDriveSchema,
-    onSubmit: async (values) => {
-      try {
-        const sessionId = localStorage.getItem('sessionId');
+    onSubmit: (values) => {
+      addToCart({
+        id: carId,
+        type: 'test-drive',
+        name: 'Test drive',
+        price: 50,
+        date: values.preferredDate,
+        time: values.preferredTime,
+        data: values,
+      })
 
-        await axios.post('http://localhost:3000/api/test-drives', {
-          carId,
-          fullname: values.fullname,
-          email: values.email,
-          phone: values.phone,
-          preferredDate: values.preferredDate || null,
-          preferredTime: values.preferredTime || null,
-          comment: values.comment,
-        }, {
-          headers: { 'x-session-id': sessionId }
-        });
-        navigate(-1);
-      } catch (err) {
-        console.error('Failed to create test drive', err);
-      }
+      navigate('/cart');
     },
   });
 
