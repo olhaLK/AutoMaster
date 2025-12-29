@@ -179,45 +179,6 @@ app.get('/api/cars/:id', async (req, res) => {
 });
 
 //Back for test drives
-app.post('/api/test-drives', authRequired, async (req, res) => {
-    try {
-        const td = await TestDrive.create({
-            userId: req.userId,
-            carId: req.body.carId,
-
-            fullname: req.body.fullname,
-            email: req.body.email,
-            phone: req.body.phone,
-            preferredDate: req.body.preferredDate || null,
-            preferredTime: req.body.preferredTime || null,
-            comment: req.body.comment,
-
-            status: 'requested',
-        });
-
-        const order = await Order.create({
-            userId: req.userId,
-            carId: req.body.carId,
-
-            fullname: req.body.fullname,
-            email: req.body.email,
-            phone: req.body.phone,
-            date: req.body.preferredDate || '',
-            time: req.body.preferredTime || '',
-            comment: req.body.comment,
-
-            status: 'scheduled',
-            type: 'test-drive',
-            progress: 'scheduled'
-        });
-
-        res.status(201).json({ testDrive: td, order });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error creating test drive' });
-    }
-});
-
 app.get('/api/test-drives', async (req, res) => {
     try {
         const tds = await TestDrive.find().sort({ createdAt: -1 });
@@ -262,32 +223,6 @@ app.put('/api/test-drives/:id', authRequired, async (req, res) => {
 })
 
 //Back for orders
-app.post('/api/orders', authRequired, async (req, res) => {
-    try {
-        const order = await Order.create({
-            userId: req.userId,
-            carId: req.body.carId,
-
-            fullname: req.body.fullname,
-            email: req.body.email,
-            phone: req.body.phone,
-            address: req.body.address,
-            date: req.body.date,
-            time: req.body.time,
-            comment: req.body.comment,
-
-            status: 'in_process',
-            type: 'purchase',
-            progress: 'in process',
-        });
-
-        res.status(201).json(order);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error creating order' });
-    }
-});
-
 app.get('/api/orders/:id', async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
@@ -405,8 +340,36 @@ app.post('/api/login', async (req, res) => {
 });
 
 
-
-
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
+app.post('/api/pay', async (req, res) => {
+    const { items, userId } = req.body;
+
+    for (const item of items) {
+
+        if (item.type === 'purchase') {
+            await Order.create({
+                userId,
+                carId: item.id,
+                ...item.data,
+                status: 'paid',
+                type: 'purchase',
+                progress: 'paid',
+            });
+        }
+
+        if (item.type === 'test-drive') {
+            await TestDrive.create({
+                userId,
+                carId: item.id,
+                preferredDate: item.date,
+                preferredTime: item.time,
+                comment: item.data?.comment || '',
+                status: 'scheduled',
+            });
+        }
+    }
+
+    res.json({ success: true });
+});

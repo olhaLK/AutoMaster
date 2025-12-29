@@ -2,8 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import './TestDriveForm.scss';
+import { addToCart } from '../../../utils/cartStorage';
+
 
 const TestDriveSchema = Yup.object({
   fullname: Yup.string().min(3, 'Too short').max(50, 'Too long').required('Required'),

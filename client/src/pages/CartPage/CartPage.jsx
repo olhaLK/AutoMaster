@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { getCart } from "../../utils/cartStorage";
+import { clearCart, getCart, removeFromCart } from "../../utils/cartStorage";
+import axios from 'axios';
+
 
 const CartPage = () => {
   const [items, setItems] = useState(getCart());
@@ -10,12 +12,11 @@ const CartPage = () => {
   }
 
   const handlePay = async () => {
-    const sessionId = localStorage.getItem('sessionId');
+    const user = JSON.parse(localStorage.getItem('user'));
 
     await axios.post('http://localhost:3000/api/pay', {
       items,
-    }, {
-      headers: { 'x-session-id': sessionId }
+      userId: user?.id,
     })
 
     clearCart();
