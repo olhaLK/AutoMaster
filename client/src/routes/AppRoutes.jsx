@@ -9,9 +9,6 @@ import CartPage from '../pages/CartPage/CartPage';
 import SignUpPage from '../pages/SignUpPage/SignUpPage';
 import SignInPage from '../pages/SignInPage/SignInPage';
 import Page404 from '../pages/Page404/Page404';
-import AdminClientsListPage from '../pages/AdminClientsListPage/AdminClientsListPage';
-import AdminOrdersListPage from '../pages/AdminOrdersListPage/AdminOrdersListPage';
-import AdminTestDrivesListPage from '../pages/AdminTestDrivesListPage/AdminTestDrivesListPage';
 import AddCarPage from "../pages/AddCar/AddCarPage.jsx";
 import EditCar from "../pages/EditCar/EditCar.jsx";
 import ProtectedRoute from './ProtectedRoute.jsx';
@@ -29,9 +26,6 @@ export default function AppRoutes() {
       {/* admin */}
       <Route element={<ProtectedRoute roles={['Admin']} />}>
         <Route path="/cars/add" element={<AddCarPage />} />
-        <Route path="/admin/clients" element={<AdminClientsListPage />} />
-        <Route path="/admin/orders" element={<AdminOrdersListPage />} />
-        <Route path="/admin/test-drives" element={<AdminTestDrivesListPage />} />
         <Route path="/car/:id/edit" element={<EditCar />} />
       </Route>
 

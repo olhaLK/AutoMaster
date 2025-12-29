@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -15,8 +15,17 @@ const TestDriveSchema = Yup.object({
   comment: Yup.string().max(300, 'Comment too long'),
 });
 
+
 export default function TestDriveForm({ carId }) {
   const navigate = useNavigate();
+
+  const [car, setCar] = useState(null);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/cars/${carId}`)
+      .then(res => res.json())
+      .then(setCar);
+  }, [carId]);
 
   const formik = useFormik({
     initialValues: {
@@ -32,12 +41,13 @@ export default function TestDriveForm({ carId }) {
       addToCart({
         id: carId,
         type: 'test-drive',
-        name: 'Test drive',
+        name: `${car.Brand} ${car.Model} — Test drive`,
+        image: car.ImgURL,
         price: 50,
         date: values.preferredDate,
         time: values.preferredTime,
         data: values,
-      })
+      });
 
       navigate('/cart');
     },

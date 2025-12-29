@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import './OrderCarForm.scss';
 import { addToCart } from '../../../utils/cartStorage';
-
+import { useEffect, useState } from "react";
 
 
 const OrderCarScheme = Yup.object({
@@ -33,6 +33,14 @@ const OrderCarScheme = Yup.object({
 export default function OrderCarForm() {
   const navigate = useNavigate();
   const { id } = useParams();
+  
+  const [car, setCar] = useState(null);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/cars/${id}`)
+      .then(res => res.json())
+      .then(setCar);
+  }, [id]);
 
   const formik = useFormik({
     initialValues: {
@@ -45,17 +53,18 @@ export default function OrderCarForm() {
       comment: '',
     },
     validationSchema: OrderCarScheme,
-  onSubmit: (values) => {
-  addToCart({
-    id,
-    type: 'purchase',
-    name: 'Car order',
-    price: 45000,
-    data: values,
-  });
+    onSubmit: (values) => {
+      addToCart({
+        id,
+        type: 'purchase',
+        name: `${car.Brand} ${car.Model}`,
+        image: car.ImgURL,
+        price: car.Price,
+        data: values,
+      });
 
-  navigate('/cart');
-},
+      navigate('/cart');
+    },
   })
 
   return (

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { clearCart, getCart, removeFromCart } from "../../utils/cartStorage";
 import axios from 'axios';
+import "./CartPage.scss";
 
 
 const CartPage = () => {
@@ -24,28 +25,48 @@ const CartPage = () => {
   }
 
   return (
-    <div>
-      <ul>
-        {items.map(item => (
-          <li key={item.id}>
-            <img src={item.image} width={80} />
+    <div className="cart">
+      <h1 className="cart-title">Cart</h1>
 
-            <div>
-              <div>{item.name}</div>
-              {item.type === 'test-drive' ? (
-                <div>{item.date} {item.time}</div>
-              ) : (
-                <div>${item.price}</div>
-              )}
-            </div>
+      {items.length === 0 ? (
+        <div className="cart-empty">Your cart is empty</div>
+      ) : (
+        <>
+          <ul className="cart-list">
+            {items.map((item) => (
+              <li className="cart-item" key={`${item.type}-${item.id}`}>
+                <img className="cart-img" src={item.image} alt={item.name} />
 
-            <button type="button" onClick={() => handleDelete(item.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+                <div className="cart-info">
+                  <p className="cart-name">{item.name}</p>
+                  <p className="cart-meta">
+                    {item.type === "test-drive"
+                      ? `${item.date || ""} ${item.time || ""}`.trim()
+                      : "Purchase"}
+                  </p>
+                </div>
 
-      {items.length > 0 && (
-        <button onClick={handlePay}>Pay now</button>
+                <div className="cart-price">
+                  {item.type === "test-drive" ? "$50" : `$${item.price}`}
+                </div>
+
+                <div className="cart-actions">
+                  <button
+                    className="cart-btn"
+                    type="button"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <button className="cart-pay" onClick={handlePay}>
+            Pay now
+          </button>
+        </>
       )}
     </div>
   )
