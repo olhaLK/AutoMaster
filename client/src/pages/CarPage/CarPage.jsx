@@ -1,10 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import './CarPage.scss';
+import { useSelector} from "react-redux";
 
 const CarPage = () => {
     const {id} = useParams();
     const navigate = useNavigate();
+    const user = useSelector(state => state.auth?.user);
 
     const [car, setCar] = useState(null);
     const [images, setImages] = useState([]);
@@ -66,12 +68,17 @@ const CarPage = () => {
             <p className="color">Color: {car.Color}</p>
             <p className="mileage">Mileage: {car.Mileage} km</p>
             <p className="wheelDrive">Wheel drive: {car.Wheeldrive}</p>
-            <button onClick={() => navigate(`/order/${id}`)} className="pageBtn">
+
+            {user?.Role === 'User' && (
+            <>
+            <button onClick={() => navigate(`/order/${id}`)} type="button" className="pageBtn">
                 Buy now
             </button>
             <button onClick={() => navigate(`/test-drive/${id}`)} type="button" className="pageBtn">
                 Sign up for a test drive
             </button>
+            </>
+                )}
 
         </div>
     );
