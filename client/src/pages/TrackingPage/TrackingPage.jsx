@@ -1,56 +1,67 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import Modal from '../../components/layout/Modal/Modal.jsx';
-import TestDriveForm from '../../components/forms/TestDriveForm/TestDriveForm.jsx';
 import './TrackingPage.scss';
-import OrderForm from '../../components/forms/OrderCarForm/OrderCarForm.jsx';
 
-
+const ORDER_STATUSES = ['pending', 'approved', 'paid', 'cancelled'];
+const TEST_DRIVE_STATUSES = ['pending', 'confirmed', 'cancelled'];
 
 const TrackingPage = () => {
     const { user } = useSelector(state => state.auth);
+    const isAdmin = user?.Role === 'Admin';
 
     const [orders, setOrders] = useState([]);
     const [testDrives, setTestDrives] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [editingTestDrive, setEditingTestDrive] = useState(null);
-    const [editingOrder, setEditingOrder] = useState(null);
-    const [modalOpen, setModalOpen] = useState(false);
+    const [orderStatuses, setOrderStatuses] = useState({});
+    const [testDriveStatuses, setTestDriveStatuses] = useState({});
 
     const fetchData = async () => {
         setLoading(true);
         setError(null);
+
         try {
             const [ordersRes, tdsRes] = await Promise.all([
                 axios.get('http://localhost:3000/api/orders'),
-                axios.get('http://localhost:3000/api/test-drives')
+                axios.get('http://localhost:3000/api/test-drives'),
             ]);
 
-            const filteredOrders = user?.Role === 'Admin'
-                ? ordersRes.data
-                : ordersRes.data.filter(o => o.userId === user.id);
+            const allOrders = Array.isArray(ordersRes.data) ? ordersRes.data : [];
+            const allTds = Array.isArray(tdsRes.data) ? tdsRes.data : [];
 
-            const filteredTds = user?.Role === 'Admin'
-                ? tdsRes.data
-                : tdsRes.data.filter(t => t.userId === user.id);
+            const filteredOrders = isAdmin ? allOrders : allOrders.filter(o => o.userId === user?.id);
+            const filteredTds = isAdmin ? allTds : allTds.filter(t => t.userId === user?.id);
 
-            setOrders(Array.isArray(filteredOrders) ? filteredOrders : []);
-            setTestDrives(Array.isArray(filteredTds) ? filteredTds : []);
+            setOrders(filteredOrders);
+            setTestDrives(filteredTds);
+
+            setOrderStatuses(
+                filteredOrders.reduce((acc, o) => {
+                    acc[o._id] = o.status || 'pending';
+                    return acc;
+                }, {})
+            );
+
+            setTestDriveStatuses(
+                filteredTds.reduce((acc, t) => {
+                    acc[t._id] = t.status || 'pending';
+                    return acc;
+                }, {})
+            );
+
         } catch (err) {
             console.error(err);
             setError('Failed to load tracking data');
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         fetchData();
-    }, [user]);
-
+    }, [user?.id, isAdmin]);
 
     const handleDeleteTestDrive = async (id) => {
         if (!window.confirm("Are you sure you want to delete this test drive?")) return;
@@ -61,14 +72,7 @@ const TrackingPage = () => {
             console.error(err);
             alert('Failed to delete test drive');
         }
-    }
-
-    const handleEditTestDrive = (td) => {
-        setEditingTestDrive(td);
-        setEditingOrder(null);
-        setModalOpen(true);
-    }
-
+    };
 
     const handleDeleteOrder = async (id) => {
         if (!window.confirm("Are you sure you want to delete this order?")) return;
@@ -79,24 +83,31 @@ const TrackingPage = () => {
             console.error(err);
             alert('Failed to delete order');
         }
-    }
+    };
 
-    const handleEditOrder = (order) => {
-        setEditingOrder(order);
-        setEditingTestDrive(null);
-        setModalOpen(true);
-    }
+    const updateOrderStatus = async (id) => {
+        try {
+            await axios.patch(`http://localhost:3000/api/orders/${id}`, {
+                status: orderStatuses[id],
+            });
+            fetchData();
+        } catch (err) {
+            console.error(err);
+            alert('Failed to update order status');
+        }
+    };
 
-    const closeModal = () => {
-        setEditingTestDrive(null);
-        setEditingOrder(null);
-        setModalOpen(false);
-    }
-
-    const handleFormSuccess = () => {
-        fetchData();
-        closeModal();
-    }
+    const updateTestDriveStatus = async (id) => {
+        try {
+            await axios.patch(`http://localhost:3000/api/test-drives/${id}`, {
+                status: testDriveStatuses[id],
+            });
+            fetchData();
+        } catch (err) {
+            console.error(err);
+            alert('Failed to update test drive status');
+        }
+    };
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p className="error">{error}</p>;
@@ -107,28 +118,52 @@ const TrackingPage = () => {
 
                 <section className="orders-section">
                     <h2>Orders</h2>
+
                     {orders.length === 0 ? (
                         <p>No orders yet</p>
                     ) : (
                         <table className="simple-table">
                             <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Progress</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {orders.map((o) => (
-                                <tr key={o._id}>
-                                    <td>{o.fullname || o.name || '—'}</td>
-                                    <td className="muted">{o.progress}</td>
-                                    <td>
-                                        <button onClick={() => handleEditOrder(o)}>Edit</button>
-                                        <button onClick={() => handleDeleteOrder(o._id)}>Delete</button>
-                                    </td>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    {isAdmin && <th>Actions</th>}
                                 </tr>
-                            ))}
+                            </thead>
+
+                            <tbody>
+                                {orders.map((o) => (
+                                    <tr key={o._id}>
+                                        <td>{o.fullname || o.name || '—'}</td>
+
+                                        <td>
+                                            {isAdmin ? (
+                                                <select
+                                                    value={orderStatuses[o._id] || 'pending'}
+                                                    onChange={(e) =>
+                                                        setOrderStatuses(prev => ({
+                                                            ...prev,
+                                                            [o._id]: e.target.value,
+                                                        }))
+                                                    }
+                                                >
+                                                    {ORDER_STATUSES.map(s => (
+                                                        <option key={s} value={s}>{s}</option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <span className="muted">{o.status || 'pending'}</span>
+                                            )}
+                                        </td>
+
+                                        {isAdmin && (
+                                            <td>
+                                                <button onClick={() => updateOrderStatus(o._id)}>Save</button>
+                                                <button onClick={() => handleDeleteOrder(o._id)}>Delete</button>
+                                            </td>
+                                        )}
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     )}
@@ -136,49 +171,58 @@ const TrackingPage = () => {
 
                 <section className="testdrives-section">
                     <h2>Test drives</h2>
+
                     {testDrives.length === 0 ? (
                         <p>No test drives yet</p>
                     ) : (
                         <table className="simple-table">
                             <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Date</th>
-                                <th>Progress</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {testDrives.map((t) => (
-                                <tr key={t._id}>
-                                    <td>{t.fullname || t.name || '—'}</td>
-                                    <td>{t.preferredDate || t.date || '—'}</td>
-                                    <td className="muted">{t.comment ? 'scheduled' : 'in process'}</td>
-                                    <td>
-                                        <button onClick={() => handleEditTestDrive(t)}>Edit</button>
-                                        <button onClick={() => handleDeleteTestDrive(t._id)}>Delete</button>
-                                    </td>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    {isAdmin && <th>Actions</th>}
                                 </tr>
-                            ))}
+                            </thead>
+
+                            <tbody>
+                                {testDrives.map((t) => (
+                                    <tr key={t._id}>
+                                        <td>{t.fullname || t.name || '—'}</td>
+                                        <td>{t.preferredDate || t.date || '—'}</td>
+
+                                        <td>
+                                            {isAdmin ? (
+                                                <select
+                                                    value={testDriveStatuses[t._id] || 'pending'}
+                                                    onChange={(e) =>
+                                                        setTestDriveStatuses(prev => ({
+                                                            ...prev,
+                                                            [t._id]: e.target.value,
+                                                        }))
+                                                    }
+                                                >
+                                                    {TEST_DRIVE_STATUSES.map(s => (
+                                                        <option key={s} value={s}>{s}</option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <span className="muted">{t.status || 'pending'}</span>
+                                            )}
+                                        </td>
+
+                                        {isAdmin && (
+                                            <td>
+                                                <button onClick={() => updateTestDriveStatus(t._id)}>Save</button>
+                                                <button onClick={() => handleDeleteTestDrive(t._id)}>Delete</button>
+                                            </td>
+                                        )}
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     )}
                 </section>
-
-                <Modal isOpen={modalOpen} onClose={closeModal}>
-                    {editingTestDrive && (
-                        <TestDriveForm
-                            testDrive={editingTestDrive}
-                            onSuccess={handleFormSuccess}
-                        />
-                    )}
-                    {editingOrder && (
-                        <OrderForm
-                            order={editingOrder}
-                            onSuccess={handleFormSuccess}
-                        />
-                    )}
-                </Modal>
 
             </div>
         </div>

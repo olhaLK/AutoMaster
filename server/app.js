@@ -222,6 +222,25 @@ app.put('/api/test-drives/:id', authRequired, async (req, res) => {
     }
 })
 
+app.patch('/api/test-drives/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const updated = await TestDrive.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    if (!updated) return res.status(404).json({ message: 'Test drive not found' });
+    return res.status(200).json(updated);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: 'Failed to update test drive status' });
+  }
+});
+
 //Back for orders
 app.get('/api/orders/:id', async (req, res) => {
     try {
@@ -269,6 +288,24 @@ app.get('/api/orders', async (req, res) => {
     }
 });
 
+app.patch('/api/orders/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        const updated = await Order.findByIdAndUpdate(
+            id,
+            { status },
+            { new: true }
+        );
+
+        if (!updated) return res.status(404).json({ message: 'Order not found' });
+        return res.status(200).json(updated);
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({ message: 'Failed to update order status' });
+    }
+});
 
 //Back for users (registration and login)
 app.post('/api/register', async (req, res) => {

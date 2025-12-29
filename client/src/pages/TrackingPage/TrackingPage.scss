@@ -1,8 +1,6 @@
-
 @use '../../styles/_variables' as vars;
 
 .tracking-page {
-  /* full-width background, original vertical sizing restored */
   background: #070707;
   color: #eaeaea;
   padding: 1.25rem 1.25rem;
@@ -15,32 +13,41 @@
 
     input {
       padding: 0.5rem;
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 6px;
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       color: #eaeaea;
     }
 
-    .actions { margin-top: 0.5rem; }
+    .actions {
+      margin-top: 0.5rem;
+    }
   }
 
-  .error { color: #f28b82; }
+  .error {
+    color: #f28b82;
+  }
 
-  .tracking-result { margin-top: 1rem; }
+  .tracking-result {
+    margin-top: 1rem;
+  }
 }
 
 .content-wrap {
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    padding: 1.5rem 2rem;
-    border-radius: vars.$radius;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-    color: #eaeaea;
-    max-width: 960px;
-    width: 100%;
-    margin: 0 auto;
-  }
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  padding: 1.5rem 2rem;
+  border-radius: vars.$radius;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  color: #eaeaea;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+}
 
-.orders-section, .testdrives-section { margin-bottom: 2rem; }
+.orders-section,
+.testdrives-section {
+  margin-bottom: 2rem;
+}
 
 .simple-table {
   width: 100%;
@@ -50,24 +57,101 @@
 .simple-table thead th {
   text-align: left;
   padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   color: #fff;
 }
 
 .simple-table tbody td {
   padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
 }
 
-.muted { color: rgba(255,255,255,0.65); font-size: 14px; }
+.muted {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 14px;
+}
 
-.orders-section h2, .testdrives-section h2 {
+.orders-section h2,
+.testdrives-section h2 {
   text-align: center;
   margin-bottom: 1rem;
   font-weight: 500;
   color: vars.$accent;
 }
 
-.simple-table tbody tr td:first-child { width: 60%; }
+.simple-table tbody tr td:first-child {
+  width: 60%;
+}
 
+/* Buttons */
+.simple-table button {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
 
+.simple-table button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(173, 80, 49, 0.6);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.simple-table button:active {
+  transform: translateY(0);
+}
+
+.simple-table button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.simple-table td:last-child {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.simple-table select {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(20, 20, 22, 0.95);
+  color: #ffffff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.simple-table select:hover {
+  border-color: rgba(173, 80, 49, 0.6);
+  background: rgba(28, 28, 30, 0.95);
+}
+
+.simple-table select:focus {
+  border-color: rgba(173, 80, 49, 0.9);
+}
+
+.simple-table option {
+  background: #111113;
+  color: #ffffff;
+}
+
+.simple-table option:checked {
+  background: rgba(173, 80, 49, 0.85);
+  color: #ffffff;
+}
+
+.simple-table option:hover {
+  background: rgba(173, 80, 49, 0.65);
+  color: #ffffff;
+}

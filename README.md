@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="client/src/assets/logo.png" alt="AutoMaster Logo" width="160" />
+</p>
+
 # AutoMaster — Client Application
 
 ## Overview
