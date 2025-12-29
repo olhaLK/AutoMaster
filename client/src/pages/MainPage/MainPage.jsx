@@ -1,8 +1,15 @@
+import { useSelector } from "react-redux";
 import MainSlider from "../../components/layout/MainSlider/MainSlider";
 import "./MainPage.scss";
 
 
 const MainPage = () => {
+  const isAuth = useSelector((state) => state.auth.isAuth);
+
+  const blockLink = (e) => {
+    if (!isAuth) e.preventDefault();
+  }
+
   return (
     <div className="main">
       <MainSlider />
@@ -53,7 +60,7 @@ const MainPage = () => {
       </div>
 
       <div className="main-features">
-        <a href="/cars" className="main-feature">
+        <a href="/cars" className="main-feature" onClick={blockLink}>
           <h3>Car Catalog</h3>
           <p>
             Explore a structured catalog of available vehicles with detailed
@@ -61,7 +68,7 @@ const MainPage = () => {
           </p>
         </a>
 
-        <a href="/tracking" className="main-feature">
+        <a href="/tracking" className="main-feature" onClick={blockLink}>
           <h3>Order Management</h3>
           <p>
             Submit purchase requests and track their status through your personal
@@ -69,7 +76,7 @@ const MainPage = () => {
           </p>
         </a>
 
-        <a href="/cars" className="main-feature">
+        <a href="/cars" className="main-feature" onClick={blockLink}>
           <h3>Test Drives</h3>
           <p>
             Schedule test drives by choosing a convenient date and time without

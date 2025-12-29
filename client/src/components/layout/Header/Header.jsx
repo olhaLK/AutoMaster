@@ -25,7 +25,7 @@ function Header() {
         navigate('/signin');
     }
 
-    const isAdmin = user?.Rolen === 'Admin';
+    const isAdmin = user?.Role === 'Admin';
 
     return (
         <header className="header">

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import carOrange from "../../../assets/car-orange.png";
 import carBlack from "../../../assets/car-black.png";
 import "./MainSlider.scss";
+import { useSelector } from "react-redux";
 
 
 const slides = [
@@ -29,6 +30,7 @@ const FADE = 600;
 
 const MainSlider = () => {
   const navigate = useNavigate();
+  const isAuth = useSelector((state) => state.auth.isAuth);
 
   const [active, setActive] = useState(0);
   const [phase, setPhase] = useState("in");
@@ -68,12 +70,11 @@ const MainSlider = () => {
           <h2>{slide.title}</h2>
           <p>{slide.text}</p>
 
-          <button
-            className="main-slider-btn"
-            onClick={() => navigate(slide.actionLink)}
-          >
-            {slide.actionText}
-          </button>
+          {isAuth && (
+            <button className="main-slider-btn" onClick={() => navigate(slide.actionLink)}>
+              {slide.actionText}
+            </button>
+          )}
         </div>
       </div>
     </section>
