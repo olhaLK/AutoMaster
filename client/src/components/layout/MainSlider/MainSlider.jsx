@@ -24,8 +24,8 @@ const slides = [
   },
 ];
 
-const INTERVAL = 7000;
-const FADE = 450;
+const INTERVAL = 4000;
+const FADE = 600;
 
 const MainSlider = () => {
   const navigate = useNavigate();

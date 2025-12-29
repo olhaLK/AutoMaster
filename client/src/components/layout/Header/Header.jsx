@@ -56,9 +56,7 @@ function Header() {
                 {isAuth && isAdmin && (
                     <>
                         <a href="/cars">Catalog</a>
-                        <a href="/admin/clients">Users</a>
-                        <a href="/admin/orders">Orders</a>
-                        <a href="/admin/test-drives">Test drives</a>
+                        <a href="/tracking">Orders/Test-drives</a>
                     </>
                 )}
             </nav>

@@ -1,9 +1,10 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import './TestDriveForm.scss';
+import { addToCart } from '../../../utils/cartStorage';
+
 
 const TestDriveSchema = Yup.object({
   fullname: Yup.string().min(3, 'Too short').max(50, 'Too long').required('Required'),
@@ -14,8 +15,17 @@ const TestDriveSchema = Yup.object({
   comment: Yup.string().max(300, 'Comment too long'),
 });
 
+
 export default function TestDriveForm({ carId }) {
   const navigate = useNavigate();
+
+  const [car, setCar] = useState(null);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/cars/${carId}`)
+      .then(res => res.json())
+      .then(setCar);
+  }, [carId]);
 
   const formik = useFormik({
     initialValues: {
@@ -27,25 +37,19 @@ export default function TestDriveForm({ carId }) {
       comment: '',
     },
     validationSchema: TestDriveSchema,
-    onSubmit: async (values) => {
-      try {
-        const sessionId = localStorage.getItem('sessionId');
+    onSubmit: (values) => {
+      addToCart({
+        id: carId,
+        type: 'test-drive',
+        name: `${car.Brand} ${car.Model} — Test drive`,
+        image: car.ImgURL,
+        price: 50,
+        date: values.preferredDate,
+        time: values.preferredTime,
+        data: values,
+      });
 
-        await axios.post('http://localhost:3000/api/test-drives', {
-          carId,
-          fullname: values.fullname,
-          email: values.email,
-          phone: values.phone,
-          preferredDate: values.preferredDate || null,
-          preferredTime: values.preferredTime || null,
-          comment: values.comment,
-        }, {
-          headers: { 'x-session-id': sessionId }
-        });
-        navigate(-1);
-      } catch (err) {
-        console.error('Failed to create test drive', err);
-      }
+      navigate('/cart');
     },
   });
 
